@@ -57,6 +57,7 @@ function RecruiterRegister() {
 
                 setDoc(doc(db, 'recruiterProfiles', email), {
                             jobs: [],
+                            queue: [],
                             companyName: "",
                             description: "",
                             industry: "",
