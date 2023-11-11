@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import './App.css';
 
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import StudentStart from './pages/StudentStart/StudentStart';
 import RecruiterStart from './pages/RecruiterStart/RecruiterStart';
 import RecruiterRegister from './pages/RecruiterRegister/RecruiterRegister';
