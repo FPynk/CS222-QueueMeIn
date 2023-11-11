@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChakraProvider, Box, Text, Button, Flex, Spacer, Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react';
 import { db } from '../../firebase';
-import { query, where, getDocs, addDoc, collection } from 'firebase/firestore';
+import { query, where, getDocs, addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import CurrEventStudent from './CurrEventStudent.module.css'; // Import the styles
 import { useLocation } from 'react-router-dom';
@@ -23,15 +23,33 @@ function StudentView() {
     // Fetch companies from the backend when the component mounts
     useEffect(() => {
         const fetchCompanies = async () => {
-            const companiesCollectionRef = collection(db, "fairs", fairId, "companies");
-            const snapshot = await getDocs(companiesCollectionRef);
-            const companiesList = snapshot.docs.map(doc => doc.data());
-            setCompanies(companiesList);
+            console.log(`Fetching companies for fair with ID: ${fairId}`);
+    
+            if (!fairId) {
+                console.log('No fairId provided');
+                return;
+            }
+    
+            const fairDocRef = doc(db, "fairs", fairId);
+            try {
+                const fairDoc = await getDoc(fairDocRef);
+                if (!fairDoc.exists()) {
+                    console.log(`No fair found with ID: ${fairId}`);
+                    return;
+                }
+    
+                const fairData = fairDoc.data();
+                console.log(`Fair data for ${fairId}: `, fairData);
+    
+                const companiesList = fairData.companies || [];
+                console.log('Companies fetched: ', companiesList);
+                setCompanies(companiesList);
+            } catch (error) {
+                console.error('Error fetching fair data: ', error);
+            }
         };
     
-        if (fairId) {
-            fetchCompanies();
-        }
+        fetchCompanies();
     }, [fairId]);
     // TODO BACKEND: UPDATE QUEUE STATUS/ DATA
     // Function to handle when "Add Me" or "Remove Me" is clicked

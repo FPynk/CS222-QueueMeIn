@@ -48,7 +48,7 @@ function RecruiterStart() {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => { // redirect to /home after signin success
             useStore.getState().setEmail(email);
-            useStore.getState().setIsRecruiter(false);
+            useStore.getState().setIsRecruiter(true);
             useStore.getState().setCurrentEventID("");
             
             clearInterval(intervalId);

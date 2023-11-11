@@ -11,10 +11,14 @@ function Home() {
     const [fairs, setFairs] = useState([])
 
     const unsubscribe = onSnapshot(collection(db, "fairs"), (snapshot) => {
+        //console.log('Snapshot received from Firestore:', snapshot);
+
         const fairList = [];
         snapshot.forEach((doc) => {
-            fairList.push(doc.data());
+            //console.log('Fair document:', doc.id, doc.data());
+            fairList.push({ ...doc.data(), fairId: doc.id });
         });
+        //console.log('Fairs list:', fairList);
         setFairs(fairList)
     });
 
@@ -22,7 +26,8 @@ function Home() {
     // pass fair id along for use later
     const isRecruiter = useStore((state) => state.isRecruiter);
     const handleViewEvent = (fairId) => {
-        if (!isRecruiter) {
+        console.log('Navigating to event with fairId:', fairId);
+        if (isRecruiter) {
             navigate('/CurrEventStudent', { state: { fairId } });
         } else {
             navigate('/current-event-company', { state: { fairId } });
