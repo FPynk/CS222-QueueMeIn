@@ -5,6 +5,7 @@ import { setDoc, doc } from 'firebase/firestore'
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { Link } from 'react-router-dom';
 import './RecruiterRegister.css';  // Importing your external CSS
+import { useStore } from "../../store"
 
 function RecruiterRegister() {
     // State variables to hold form inputs like email, password, confirmpassword
@@ -50,6 +51,10 @@ function RecruiterRegister() {
         // Create account with Firestore Authentication
         createUserWithEmailAndPassword(auth, email, password)
             .then(() => { // on success, create profile structure in database
+                useStore.getState().setEmail(email);
+                useStore.getState().setIsRecruiter(true);
+                useStore.getState().setCurrentEvent("");
+
                 setDoc(doc(db, 'recruiterProfiles', email), {
                             jobs: [],
                             companyName: "",
