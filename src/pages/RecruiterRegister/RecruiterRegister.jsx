@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ChakraProvider, Box, Text, Input, Button, VStack } from '@chakra-ui/react';
-import { db } from '../../firebase';
-import { query, where, getDocs, addDoc, collection } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import { setDoc, doc } from 'firebase/firestore'
+import { createUserWithEmailAndPassword } from "firebase/auth"
 import { Link } from 'react-router-dom';
 import '../page_css/RecruiterRegister.css';  // Importing your external CSS
 
@@ -11,11 +12,6 @@ function RecruiterRegister() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
-    // Delay function for debugging
-    const sleep = (milliseconds) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds));
-    }
     
     // Function to handle form submission to firebase
     const handleSubmit = async (e) => {
@@ -29,17 +25,6 @@ function RecruiterRegister() {
         // Validate email format
         if (!emailRegex.test(email)) {
             setErrorMessage('Invalid email address');
-            return;
-        }
-
-        // Firestore query to check if the email already exists
-        // Personal notes explains in detail
-        const q = query(collection(db, 'users'), where('email', '==', email));
-        const querySnapshot = await getDocs(q);
-
-        // Check if email exists
-        if (!querySnapshot.empty) {
-            setErrorMessage("Account already exists");
             return;
         }
 
@@ -62,32 +47,27 @@ function RecruiterRegister() {
             counter = (counter + 1) % 3;                // Cycle from 0 to 2
         }, 500);                                        // update every 500ms
 
-        // Sending data to firestore
-        try {
-            await addDoc(collection(db, "users"), {
-                email,
-                password,
-                recruiter: true,
-            });
-
-            // Debugging purposes
-            // await sleep(5000);
-
-            // Clear loading message and set success message
-            clearInterval(intervalId);
-            setErrorMessage("Account created successfully!");
-
-            // Clear fields once done
-            setEmail('');
-            setPassword('');
-            setConfirmPassword('');
-            // Redirect to home page
-            window.location.href = '/home'; // Hard-coded redirect to home page
-        } catch (e) {
-            // Clear loading message and set error message
-            clearInterval(intervalId);
-            setErrorMessage("Error creating account: ${e}");
-        }
+        // Create account with Firestore Authentication
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => { // on success, create profile structure in database
+                setDoc(doc(db, 'recruiterProfiles', email), {
+                            jobs: [],
+                            companyName: "",
+                            description: "",
+                            industry: "",
+                            phone: "",
+                            recruiterName: "",
+                            website: ""
+                        })
+                    .then(() => { // redirect to /home after data logged
+                        window.location.href = '/home';
+                    })
+            })
+            .catch((e) => { // handle sign-up errors
+                clearInterval(intervalId)
+                setErrorMessage(`Error creating account: ${e}`)
+                }
+            )
     }
 
     return (
