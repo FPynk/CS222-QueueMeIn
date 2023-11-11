@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChakraProvider, Box, Text, Button, Flex, Spacer, Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react';
 import { db } from '../../firebase';
-import { query, where, getDocs, addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { query, where, getDocs, addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import CurrEventStudent from './CurrEventStudent.module.css'; // Import the styles
 import { useLocation } from 'react-router-dom';
@@ -73,14 +73,16 @@ function StudentView() {
     useEffect(() => {
         const fetchAllRecruiterProfiles = async () => {
             const profiles = [];
-            for (const email of companyEmails) { // Assume companyEmails is an array of emails
+            for (const email of companyEmails) {
+                if (!email) {
+                    console.log("Undefined email encountered");
+                    continue;
+                }
                 const profile = await fetchRecruiterProfile(email);
                 if (profile) {
-                    profiles.push(profile);
+                    profiles.push({ id: email, ...profile }); // Include the email (document ID) in the profile object
                 }
             }
-            console.log("All fetched profiles: ", profiles);
-            // Set the profiles to state, or handle them as needed
             setRecruiterProfiles(profiles);
         };
     
@@ -89,23 +91,40 @@ function StudentView() {
         }
     }, [companyEmails]); // Re-run when companyEmails changes
     
-    // TODO BACKEND: UPDATE QUEUE STATUS/ DATA
-    // Function to handle when "Add Me" or "Remove Me" is clicked
-    const handleQueue = (index) => {
-        // TODO BACKEND: Add logic to enqueue and dequeue the student to this company on the backend
-        // This should also set the number of people in the queue
-        if (currentCompany === null) {
-        setCurrentCompany(index);
-        } else if (currentCompany === index) {
-        setCurrentCompany(null);
-        setQueueCount(Math.floor(Math.random() * 10));
-        }
-    }
-    
     // Function to update the queue count (can be called when backend updates)
-    const updateQueueCount = (newCount) => {
-        // TODO BACKEND: Update the queue count based on backend data
-        setQueueCount(newCount);
+    const handleQueue = async (email, index) => {
+        console.log("Email:", email);
+        const companyDocRef = doc(db, "recruiterProfiles", email);
+    
+        try {
+            const companyDoc = await getDoc(companyDocRef);
+            if (!companyDoc.exists()) {
+                console.log(`No company found with email: ${email}`);
+                return;
+            }
+    
+            let updatedQueue = companyDoc.data().queue || [];
+            const studentEmail = "student@example.com"; // Replace with the actual student's email
+    
+            if (updatedQueue.includes(studentEmail)) {
+                updatedQueue = updatedQueue.filter(e => e !== studentEmail); // Remove student from queue
+            } else {
+                updatedQueue.push(studentEmail); // Add student to queue
+            }
+            console.log("Before update - currentCompany:", currentCompany, "index:", index);
+            // Toggle currentCompany state
+            if (currentCompany === index) {
+                setCurrentCompany(null); // Remove from queue
+            } else {
+                setCurrentCompany(index); // Add to queue
+            }
+            await updateDoc(companyDocRef, { queue: updatedQueue });
+            setCurrentCompany(index);
+            setQueueCount(updatedQueue.length);
+            console.log("After update - currentCompany:", currentCompany);
+        } catch (error) {
+            console.error("Error updating queue: ", error);
+        }
     };
 
     return (
@@ -142,10 +161,13 @@ function StudentView() {
                         {/* BACKEND TODO: UPDATE QUEUE STATUS/ DATA */}
                         <Button 
                         size="sm" 
-                        onClick={(e) => { e.stopPropagation(); handleQueue(index); }}
+                        onClick={(e) => { 
+                            e.stopPropagation(); 
+                            handleQueue(profile.id, index); 
+                        }}
                         isDisabled={currentCompany !== null && currentCompany !== index}
                         >
-                        {currentCompany  === index ? 'Remove Me' : 'Add Me'}
+                        {currentCompany === index ? 'Remove Me' : 'Add Me'}
                         </Button>
                     </AccordionButton>
                     </h2>
