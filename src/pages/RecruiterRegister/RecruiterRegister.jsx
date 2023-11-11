@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChakraProvider, Box, Text, Input, Button, VStack } from '@chakra-ui/react';
-import { db, auth } from '../firebase';
+import { db, auth } from '../../firebase';
 import { setDoc, doc } from 'firebase/firestore'
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { Link } from 'react-router-dom';
