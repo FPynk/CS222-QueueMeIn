@@ -1,0 +1,59 @@
+.studentRegisterContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.backButton {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background-color: #3B82F6;
+    color: white;
+    width: 4rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    line-height: 2rem;
+}
+
+.title {
+    font-size: 6rem;
+    margin-top: 3.5rem;
+    text-align: center;
+}
+
+.subTitle {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 0rem;
+}
+
+.inputGroup {
+    margin-top: 1rem;
+}
+
+.inputField {
+    width: 16rem;
+    height: 3rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid gray;
+    margin-top: 0rem;
+}
+
+.submitButton {
+    background-color: #23C55E;
+    color: white;
+    width: 16rem;
+    height: 4rem;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    margin-top: 0rem;
+}
+
+.errorMessage {
+    color: red;
+    margin-top: 1rem;
+}

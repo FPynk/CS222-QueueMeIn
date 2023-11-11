@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.welcome-text {
+    font-size: 6rem;
+    margin-top: 3.5rem;
+    text-align: center;
+}
+
+.sub-text {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 0rem;
+}
+
+.btn {
+    width: 16rem;
+    height: 4rem;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+.btn-red {
+    background-color: #F04444;
+    color: white;
+}
+
+.btn-blue {
+    background-color: #3B82F6;
+    color: white;
+}
