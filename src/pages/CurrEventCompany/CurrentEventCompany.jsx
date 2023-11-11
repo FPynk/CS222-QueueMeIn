@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NavBar from './NavBar';
+import NavBar from '../NavBar';
 
 function CurrentEventCompany() { // Purely for testing
     const [queue, setQueue] = useState([
