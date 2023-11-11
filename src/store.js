@@ -18,7 +18,7 @@ const useStore = create((set) => ({
     currentEventID: "",
     setEmail: (em) => set(() => ({email: em})),
     setIsRecruiter: (bool) => set(() => ({isRecruiter: bool})),
-    setCurrentEvent: (id) => set(() => ({currentEvent: id})),
+    setCurrentEventID: (id) => set(() => ({currentEventID: id})),
 }));
 
 export { useStore } ;
