@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../NavBar';
 import React, { useState } from 'react';
-
 import { db } from '../../firebase';
-
 import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
+import useStore from '../../store.js';
 
 function Home() {
     const navigate = useNavigate();
@@ -18,14 +17,13 @@ function Home() {
         setFairs(fairList)
     });
 
-    // Replace with actual check to see if user is a recruiter
-
-    const isRecruiter = false;
+    // Check if its a recruiter
+    const isRecruiter = useStore((state) => state.isRecruiter);
     const handleViewEvent = () => {
-        if (isRecruiter) {
-            navigate('/current-event-company');
-        } else {
+        if (!isRecruiter) {
             navigate('/CurrEventStudent');
+        } else {
+            navigate('/current-event-company');
         }
     };
 
