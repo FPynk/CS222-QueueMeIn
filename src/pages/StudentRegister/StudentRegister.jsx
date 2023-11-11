@@ -3,7 +3,7 @@ import { ChakraProvider, Box, Text, Input, Button, VStack } from '@chakra-ui/rea
 import { db } from '../../firebase';
 import { query, where, getDocs, addDoc, collection } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
-import '../page_css/StudentRegister.css';  // Importing your external CSS
+import './StudentRegister.css';  // Importing your external CSS
 
 function StudentRegister() {
     // State variables to hold form inputs like email, password, confirmpassword

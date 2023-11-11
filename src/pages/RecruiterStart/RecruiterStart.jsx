@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../page_css/RecruiterStart.css';
+import './RecruiterStart.css';
 
 function RecruiterStart() {
     const emailRef = useRef(null);
