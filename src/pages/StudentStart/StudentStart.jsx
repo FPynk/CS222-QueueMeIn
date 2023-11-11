@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './StudentStart.css';
+import { auth } from '../../firebase'
+import {  signInWithEmailAndPassword   } from 'firebase/auth';
 
 function StudentStart() {
     const emailRef = useRef(null);
@@ -40,22 +42,42 @@ function StudentStart() {
             counter = (counter + 1) % 3;   // Cycle from 0 to 2
         }, 500);                           // Update every 500ms
 
-        // TODO: Add your actual login check logic here
-        // Mock Firestore data
-        const mockFirestoreEmail = 'test@email.com'; // Replace with backend code
-        const mockFirestorePassword = 'testPassword'; // Replace with backend code
-
-        // Clear loading message
-        clearInterval(intervalId);
-
-        // Here you would actually query Firestore to get the email and password
-        // For now, using mock values
-        if (email === mockFirestoreEmail && password === mockFirestorePassword) {
-            navigate('/home');
-        } else {
+        // Actual login check logic here
+        // Firebase sign in
+        
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => { // redirect to /home after signin success
+            clearInterval(intervalId);
+            const user = userCredential.user;
+            window.location.href = '/home';
+            console.log(user);
+        })
+        .catch((error) => {
+            clearInterval(intervalId);
             setLoginError('Invalid Email or Password');
             setPassword('');
-        }
+        });
+
+
+
+
+
+
+        // // Mock Firestore data
+        // const mockFirestoreEmail = 'test@email.com'; // Replace with backend code
+        // const mockFirestorePassword = 'testPassword'; // Replace with backend code
+
+        // // Clear loading message
+        // clearInterval(intervalId);
+
+        // // Here you would actually query Firestore to get the email and password
+        // // For now, using mock values
+        // if (email === mockFirestoreEmail && password === mockFirestorePassword) {
+        //     navigate('/home');
+        // } else {
+        //     setLoginError('Invalid Email or Password');
+        //     setPassword('');
+        // }
     };
   
     const handleInputKeyPress = (e) => {
