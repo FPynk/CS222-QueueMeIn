@@ -9,6 +9,9 @@ import RecruiterStart from './pages/RecruiterStart/RecruiterStart';
 import RecruiterRegister from './pages/RecruiterRegister/RecruiterRegister';
 import StudentRegister from './pages/StudentRegister/StudentRegister';
 import CurrEventStudent from './pages/CurrEventStudent/CurrEventStudent';
+import RecruiterQueue from './pages/RecruiterQueue/RecruiterQueue';
+import StudentProfile from './pages/StudentProfile/StudentProfile';
+
 
 function App() {
     return (
@@ -31,8 +34,24 @@ function App() {
                                     Recruiter
                                 </button>
                             </Link>
+
+                            <Link to="/recruiter-queue">
+                                <button className={styles['btn'] + ' ' + styles['btn-blue']}>
+                                    Temporary Recruiter Queue
+                                </button>
+                            </Link>
+
+                            <Link to="/student-profile">
+                                <button className={styles['btn'] + ' ' + styles['btn-blue']}>
+                                    Temporary Student Profile
+                                </button>
+                            </Link>
+
+
                         </div>
                     } />
+                    <Route path="/student-profile" element={<StudentProfile />} />
+                    <Route path="/recruiter-queue" element={<RecruiterQueue />} />
                     <Route path="/student-start" element={<StudentStart />} />
                     <Route path="/student-register" element={<StudentRegister />} />
                     <Route path="/recruiter-start" element={<RecruiterStart />} />
