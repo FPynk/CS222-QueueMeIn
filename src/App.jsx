@@ -1,14 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-import styles from './App.module.css';
+import './App.css';
 
-import Home from './pages/Home/Home';
-import StudentStart from './pages/StudentStart/StudentStart';
-import RecruiterStart from './pages/RecruiterStart/RecruiterStart';
-import RecruiterRegister from './pages/RecruiterRegister/RecruiterRegister';
-import StudentRegister from './pages/StudentRegister/StudentRegister';
+import Home from './pages/Home';
+import StudentStart from './pages/StudentStart';
+import RecruiterStart from './pages/RecruiterStart';
+import RecruiterRegister from './pages/RecruiterRegister';
+import StudentRegister from './pages/StudentRegister';
 import CurrEventStudent from './pages/CurrEventStudent/CurrEventStudent';
+import CurrentEventCompany from './pages/CurrentEventCompany';
 
 function App() {
     return (
@@ -16,18 +17,18 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={
-                        <div className={styles['container']}>
-                            <h1 className={styles['welcome-text']}>Welcome to QueueMeIn</h1>
-                            <p className={styles['sub-text']}>What are you?</p>
+                        <div className="container">
+                            <h1 className="welcome-text">Welcome to QueueMeIn</h1>
+                            <p className="sub-text">What are you?</p>
                             
                             <Link to="/student-start">
-                                <button className={styles['btn'] + ' ' + styles['btn-red']}>
+                                <button className="btn btn-red">
                                     Student
                                 </button>
                             </Link>
-    
+
                             <Link to="/recruiter-start">
-                                <button className={styles['btn'] + ' ' + styles['btn-blue']}>
+                                <button className="btn btn-blue">
                                     Recruiter
                                 </button>
                             </Link>
@@ -39,6 +40,7 @@ function App() {
                     <Route path="/recruiter-register" element={<RecruiterRegister />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/CurrEventStudent" element={<CurrEventStudent />} />
+                    <Route path="/current-event-company" element={<CurrentEventCompany />} />
                 </Routes>
             </Router>
         </ChakraProvider>
