@@ -47,6 +47,10 @@ function RecruiterStart() {
         //firebase sign in 
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => { // redirect to /home after signin success
+            useStore.getState().setEmail(email);
+            useStore.getState().setIsRecruiter(false);
+            useStore.getState().setCurrentEventID("");
+            
             clearInterval(intervalId);
             const user = userCredential.user;
             window.location.href = '/home';

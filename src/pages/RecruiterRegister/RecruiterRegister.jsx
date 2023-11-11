@@ -53,7 +53,7 @@ function RecruiterRegister() {
             .then(() => { // on success, create profile structure in database
                 useStore.getState().setEmail(email);
                 useStore.getState().setIsRecruiter(true);
-                useStore.getState().setCurrentEvent("");
+                useStore.getState().setCurrentEventID("");
 
                 setDoc(doc(db, 'recruiterProfiles', email), {
                             jobs: [],

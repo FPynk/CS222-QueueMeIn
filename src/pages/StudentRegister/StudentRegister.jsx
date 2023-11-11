@@ -52,7 +52,7 @@ function StudentRegister() {
             .then(() => { // on success, log the type of user
                 useStore.getState().setEmail(email);
                 useStore.getState().setIsRecruiter(false);
-                useStore.getState().setCurrentEvent("");
+                useStore.getState().setCurrentEventID("");
                 
                 setDoc(doc(db, 'studentProfiles', email), {
                             college: "",

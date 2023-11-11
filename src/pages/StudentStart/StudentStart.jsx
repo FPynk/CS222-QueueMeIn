@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './StudentStart.css';
 import { auth } from '../../firebase'
 import {  signInWithEmailAndPassword   } from 'firebase/auth';
+import { useStore } from '../../store'
 
 function StudentStart() {
     const emailRef = useRef(null);
@@ -48,6 +49,10 @@ function StudentStart() {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => { // redirect to /home after signin success
             clearInterval(intervalId);
+            useStore.getState().setEmail(email);
+            useStore.getState().setIsRecruiter(false);
+            useStore.getState().setCurrentEventID("");
+
             const user = userCredential.user;
             window.location.href = '/home';
             console.log(user);
