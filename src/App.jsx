@@ -15,7 +15,7 @@ import CurrEventStudent from './pages/CurrEventStudent/CurrEventStudent';
 import CurrentEventCompany from './pages/CurrEventCompany/CurrEventCompany';
 
 function App() {
-    useStore.getState().setEmail("jd@email.com");
+    useStore.getState().setEmail("recruiter@gmail.com");
     useStore.getState().setIsRecruiter(true);
 
     return (

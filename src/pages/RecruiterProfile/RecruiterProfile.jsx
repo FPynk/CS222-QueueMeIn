@@ -144,7 +144,7 @@ function RecruiterProfile() {
             jobs: jobs
         })
             .then(() => {
-                alert("profile updated")
+                alert("Your profile has been successfully updated.")
             })
     }
 
@@ -187,7 +187,7 @@ function RecruiterProfile() {
                             </AccordionButton>
                         </AccordionItem>
                     </Accordion>
-                    <Button px="85px" colorScheme="green" onClick={() => submitRecruiterPage()}>Submit</Button>
+                    <Button px="85px" colorScheme="green" onClick={() => submitRecruiterPage()}>Update Profile</Button>
                 </VStack>
             </Box>
         </div>
