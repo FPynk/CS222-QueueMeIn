@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { ChakraProvider, Box, Text, Input, Button, VStack } from '@chakra-ui/react';
 import { auth, db } from '../../firebase';
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import { setDoc, doc } from "firebase/firestore"
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
 import { Link } from 'react-router-dom';
+import { useStore } from '../../store';
+
 import './StudentRegister.css';  // Importing your external CSS
 
 function StudentRegister() {
@@ -46,9 +48,12 @@ function StudentRegister() {
             setErrorMessage(loading_messages[counter]);
             counter = (counter + 1) % 3;                // Cycle from 0 to 2
         }, 500);                                        // update every 500ms
-
         createUserWithEmailAndPassword(auth, email, password)
             .then(() => { // on success, log the type of user
+                useStore.getState().setEmail(email);
+                useStore.getState().setIsRecruiter(false);
+                useStore.getState().setCurrentEvent("");
+                
                 setDoc(doc(db, 'studentProfiles', email), {
                             college: "",
                             fairs: [],
