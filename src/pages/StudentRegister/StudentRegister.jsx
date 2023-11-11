@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChakraProvider, Box, Text, Input, Button, VStack } from '@chakra-ui/react';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { query, where, getDocs, addDoc, collection } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import '../page_css/StudentRegister.css';  // Importing your external CSS
