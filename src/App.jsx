@@ -4,12 +4,12 @@ import { ChakraProvider } from '@chakra-ui/react';
 import './App.css';
 
 import Home from './pages/Home';
-import StudentStart from './pages/StudentStart';
-import RecruiterStart from './pages/RecruiterStart';
-import RecruiterRegister from './pages/RecruiterRegister';
-import StudentRegister from './pages/StudentRegister';
+import StudentStart from './pages/StudentStart/StudentStart';
+import RecruiterStart from './pages/RecruiterStart/RecruiterStart';
+import RecruiterRegister from './pages/RecruiterRegister/RecruiterRegister';
+import StudentRegister from './pages/StudentRegister/StudentRegister';
 import CurrEventStudent from './pages/CurrEventStudent/CurrEventStudent';
-import CurrentEventCompany from './pages/CurrentEventCompany';
+import CurrentEventCompany from './pages/CurrEventCompany/CurrEventCompany';
 
 function App() {
     return (
