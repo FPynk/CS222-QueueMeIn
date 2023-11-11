@@ -30,7 +30,7 @@
 }
 
 .mt-8-button {
-    margin-top: 1rem;
+    margin-top: 0rem;
     background-color: #23C55E;
     color: white;
     width: 16rem;
@@ -39,7 +39,7 @@
     font-size: 1.5rem;
 }
 .mt-4-button {
-    margin-top: 1rem;
+    margin-top: 0rem;
     background-color: #3B82F6;
     color: white;
     width: 16rem;
@@ -49,7 +49,6 @@
 }
 
 .input-box {
-    margin-top: 1rem;
     width: 16rem;
     height: 3rem;
     padding: 0.5rem;
