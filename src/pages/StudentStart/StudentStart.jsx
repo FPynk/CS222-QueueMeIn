@@ -57,27 +57,6 @@ function StudentStart() {
             setLoginError('Invalid Email or Password');
             setPassword('');
         });
-
-
-
-
-
-
-        // // Mock Firestore data
-        // const mockFirestoreEmail = 'test@email.com'; // Replace with backend code
-        // const mockFirestorePassword = 'testPassword'; // Replace with backend code
-
-        // // Clear loading message
-        // clearInterval(intervalId);
-
-        // // Here you would actually query Firestore to get the email and password
-        // // For now, using mock values
-        // if (email === mockFirestoreEmail && password === mockFirestorePassword) {
-        //     navigate('/home');
-        // } else {
-        //     setLoginError('Invalid Email or Password');
-        //     setPassword('');
-        // }
     };
   
     const handleInputKeyPress = (e) => {
