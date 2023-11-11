@@ -18,7 +18,7 @@ function Home() {
     });
 
     // Check if its a recruiter
-    const isRecruiter = useStore((state) => state.isRecruiter);
+    const isRecruiter = useStore.getState().isRecruiter;
     const handleViewEvent = () => {
         if (!isRecruiter) {
             navigate('/CurrEventStudent');
