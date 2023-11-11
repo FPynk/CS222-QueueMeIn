@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './RecruiterStart.css';
-
+import { useStore } from '../../store'
 import { auth } from '../../firebase'
 import {  signInWithEmailAndPassword   } from 'firebase/auth';
 
