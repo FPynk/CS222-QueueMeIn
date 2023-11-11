@@ -17,8 +17,11 @@ function StudentView() {
     // State to manage the number of people ahead in the queue for that company
     const [queueCount, setQueueCount] = useState(0);
 
-    // State to manage the list of companies
-    const [companies, setCompanies] = useState([]);
+    // State to manage the list of companies for email
+    const [companyEmails, setCompanyEmails] = useState([]);
+
+    // states to track profiles
+    const [recruiterProfiles, setRecruiterProfiles] = useState([]);
 
     // Fetch companies from the backend when the component mounts
     useEffect(() => {
@@ -43,7 +46,7 @@ function StudentView() {
     
                 const companiesList = fairData.companies || [];
                 console.log('Companies fetched: ', companiesList);
-                setCompanies(companiesList);
+                setCompanyEmails(companiesList);
             } catch (error) {
                 console.error('Error fetching fair data: ', error);
             }
@@ -51,6 +54,41 @@ function StudentView() {
     
         fetchCompanies();
     }, [fairId]);
+    
+    const fetchRecruiterProfile = async (email) => {
+        const docRef = doc(db, "recruiterProfiles", email);
+        try {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                return docSnap.data();
+            } else {
+                console.log("No such document!");
+            }
+        } catch (error) {
+            console.error("Error fetching recruiter profile: ", error);
+        }
+        return null;
+    };
+    
+    useEffect(() => {
+        const fetchAllRecruiterProfiles = async () => {
+            const profiles = [];
+            for (const email of companyEmails) { // Assume companyEmails is an array of emails
+                const profile = await fetchRecruiterProfile(email);
+                if (profile) {
+                    profiles.push(profile);
+                }
+            }
+            console.log("All fetched profiles: ", profiles);
+            // Set the profiles to state, or handle them as needed
+            setRecruiterProfiles(profiles);
+        };
+    
+        if (companyEmails && companyEmails.length > 0) {
+            fetchAllRecruiterProfiles();
+        }
+    }, [companyEmails]); // Re-run when companyEmails changes
+    
     // TODO BACKEND: UPDATE QUEUE STATUS/ DATA
     // Function to handle when "Add Me" or "Remove Me" is clicked
     const handleQueue = (index) => {
@@ -87,12 +125,12 @@ function StudentView() {
             {/* Accordian to vertically stack companies and allow for dropdown for qualifications */}
             <Accordion allowMultiple>
                 {/* BACKEND TODO: UPDATE COMPANY INFO */}
-                {companies.map((_, index) => (
+                {recruiterProfiles.map((profile, index) => (
                 <AccordionItem key={index}>
-                    <h2>
+                <h2>
                     <AccordionButton>
                         <Box flex="1" textAlign="left">
-                        Company {index + 1}
+                            {profile.companyName}
                         </Box>
                         {/* Queue Status Display */}
                         {currentCompany  === index && 
@@ -114,9 +152,23 @@ function StudentView() {
                     {/* Dropdown section to show qualifications */}
                     {/* BACKEND TODO: EXTRACT QUALIFICATION DATA */}
                     <AccordionPanel>
-                    <Text>
-                        Qualification 1, Qualification 2
-                    </Text>
+                        <Text>Description: {profile.description}</Text>
+                        <Text>Industry: {profile.industry}</Text>
+                        <Text>Phone: {profile.phone}</Text>
+                        <Text>Recruiter: {profile.recruiterName}</Text>
+                        <Text>Website: {profile.website}</Text>
+                        {/* Displaying Jobs */}
+                        <Text> Job List: </Text>
+                        {profile.jobs.map((job, jobIndex) => (
+                        <Box key={jobIndex} p={2} borderWidth="1px" borderRadius="lg">
+                            <Text>Title: {job.title}</Text>
+                            <Text>Type: {job.type}</Text>
+                            <Text>Industry: {job.industry}</Text>
+                            <Text>Majors: {job.majors}</Text>
+                            <Text>Years: {job.years}</Text>
+                            <Text>Description: {job.description}</Text>
+                        </Box>
+                        ))}
                     </AccordionPanel>
                 </AccordionItem>
                 ))}
