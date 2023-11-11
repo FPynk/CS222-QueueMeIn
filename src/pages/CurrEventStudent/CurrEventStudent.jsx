@@ -4,8 +4,13 @@ import { db } from '../../firebase';
 import { query, where, getDocs, addDoc, collection } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import CurrEventStudent from './CurrEventStudent.module.css'; // Import the styles
+import { useLocation } from 'react-router-dom';
 
 function StudentView() {
+    // grab fair ID to grab info ltr
+    const location = useLocation();
+    const { fairId } = location.state;
+
     // State to manage the company currently in the queue
     const [currentCompany, setCurrentCompany] = useState(null);
 
@@ -17,10 +22,17 @@ function StudentView() {
 
     // Fetch companies from the backend when the component mounts
     useEffect(() => {
-        // TODO BACKEND: Fetch event data for number of companies
-        setCompanies(Array.from({ length: 10 })); // Placeholder
-    }, []);
-
+        const fetchCompanies = async () => {
+            const companiesCollectionRef = collection(db, "fairs", fairId, "companies");
+            const snapshot = await getDocs(companiesCollectionRef);
+            const companiesList = snapshot.docs.map(doc => doc.data());
+            setCompanies(companiesList);
+        };
+    
+        if (fairId) {
+            fetchCompanies();
+        }
+    }, [fairId]);
     // TODO BACKEND: UPDATE QUEUE STATUS/ DATA
     // Function to handle when "Add Me" or "Remove Me" is clicked
     const handleQueue = (index) => {

@@ -3,7 +3,7 @@ import NavBar from '../NavBar';
 import React, { useState } from 'react';
 import { db } from '../../firebase';
 import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
-import { useStore } from "../../store";
+import { useStore } from '../../store';
 
 function Home() {
     const navigate = useNavigate();
@@ -21,12 +21,13 @@ function Home() {
     });
 
     // Check if its a recruiter
+    // pass fair id along for use later
     const isRecruiter = useStore((state) => state.isRecruiter);
-    const handleViewEvent = () => {
+    const handleViewEvent = (fairId) => {
         if (!isRecruiter) {
-            navigate('/CurrEventStudent');
+            navigate('/CurrEventStudent', { state: { fairId } });
         } else {
-            navigate('/current-event-company');
+            navigate('/current-event-company', { state: { fairId } });
         }
     };
 
@@ -44,7 +45,7 @@ function Home() {
                             <p className="text-xl">{fair.name}</p>
                             <button
                                 className="bg-blue-500 text-white px-4 py-2 rounded absolute top-0 right-8 mt-2 mr-2"
-                                onClick={handleViewEvent}
+                                onClick={() => handleViewEvent(fair.fairId)}
                             >
                                 View Event
                             </button>
