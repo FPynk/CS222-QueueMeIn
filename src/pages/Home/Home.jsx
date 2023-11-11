@@ -3,7 +3,7 @@ import NavBar from '../NavBar';
 import React, { useState } from 'react';
 import { db } from '../../firebase';
 import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
-import useStore from '../../store.js';
+import { useStore } from '../../store';
 
 function Home() {
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ function Home() {
     });
 
     // Check if its a recruiter
-    const isRecruiter = useStore((state) => state.isRecruiter);
+    const isRecruiter = useStore.getState().isRecruiter;
     const handleViewEvent = () => {
         if (!isRecruiter) {
             navigate('/CurrEventStudent');
