@@ -3,7 +3,7 @@ import NavBar from '../NavBar';
 import React, { useState } from 'react';
 import { db } from '../../firebase';
 import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
-import useStore from '../../store.js';
+import { useStore } from '../../store';
 
 function Home() {
     const navigate = useNavigate();
