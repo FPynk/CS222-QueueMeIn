@@ -8,9 +8,6 @@ import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'fire
 
 function Home() {
     const navigate = useNavigate();
-
-    // Replace map with data from firebase
-
     const [fairs, setFairs] = useState([])
 
     const unsubscribe = onSnapshot(collection(db, "fairs"), (snapshot) => {
@@ -21,13 +18,14 @@ function Home() {
         setFairs(fairList)
     });
 
-    // Replace with actual check to see if user is a student
-    const isStudent = false;
+    // Replace with actual check to see if user is a recruiter
+
+    const isRecruiter = false;
     const handleViewEvent = () => {
-        if (isStudent) {
-            navigate('/CurrEventStudent');
-        } else {
+        if (isRecruiter) {
             navigate('/current-event-company');
+        } else {
+            navigate('/CurrEventStudent');
         }
     };
 
