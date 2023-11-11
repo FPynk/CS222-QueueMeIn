@@ -150,7 +150,6 @@ function StudentView() {
                     </AccordionButton>
                     </h2>
                     {/* Dropdown section to show qualifications */}
-                    {/* BACKEND TODO: EXTRACT QUALIFICATION DATA */}
                     <AccordionPanel>
                         <Text>Description: {profile.description}</Text>
                         <Text>Industry: {profile.industry}</Text>
