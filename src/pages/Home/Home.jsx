@@ -3,13 +3,11 @@ import NavBar from '../NavBar';
 import React, { useState } from 'react';
 import { db } from '../../firebase';
 import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
+
 import { useStore } from '../../store';
 
 function Home() {
     const navigate = useNavigate();
-
-    // Replace map with data from firebase
-
     const [fairs, setFairs] = useState([])
 
     const unsubscribe = onSnapshot(collection(db, "fairs"), (snapshot) => {
