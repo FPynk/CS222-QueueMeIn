@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import './StudentStart.css';
 import { auth } from '../../firebase'
 import {  signInWithEmailAndPassword   } from 'firebase/auth';
-import { useStore } from '../../store'
+import { userStore } from '../../store'
 
 function StudentStart() {
+    const user = userStore((state) => state)
+
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
   
@@ -49,15 +51,16 @@ function StudentStart() {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => { // redirect to /home after signin success
             clearInterval(intervalId);
-            useStore.getState().setEmail(email);
-            useStore.getState().setIsRecruiter(false);
-            useStore.getState().setCurrentEventID("");
+            user.setEmail(email)
+            user.setIsRecruiter(false)
+            user.setEventID("")
+            
 
-            const user = userCredential.user;
+            // const user = userCredential.user;
             window.location.href = '/home';
-            console.log(user);
         })
         .catch((error) => {
+            console.log(error)
             clearInterval(intervalId);
             setLoginError('Invalid Email or Password');
             setPassword('');

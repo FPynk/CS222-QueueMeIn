@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import './App.css';
-import { useStore } from "./store"
+import { userStore } from "./store"
 
 import Home from './pages/Home/Home';
 import StudentStart from './pages/StudentStart/StudentStart';
@@ -15,8 +15,7 @@ import CurrEventStudent from './pages/CurrEventStudent/CurrEventStudent';
 import CurrentEventCompany from './pages/CurrEventCompany/CurrEventCompany';
 
 function App() {
-    useStore.getState().setEmail("recruiter@gmail.com");
-    useStore.getState().setIsRecruiter(true);
+    const user = userStore((state) => state)
 
     return (
         <ChakraProvider>
@@ -47,7 +46,7 @@ function App() {
                     <Route path="/home" element={<Home />} />
                     <Route path="/CurrEventStudent" element={<CurrEventStudent />} />
                     <Route path="/current-event-company" element={<CurrentEventCompany />} />
-                    <Route path="/profile" element={(useStore.getState().isRecruiter)?
+                    <Route path="/profile" element={(user.isRecruiter)?
                         <RecruiterProfile /> : <StudentProfile />} />
                 </Routes>
             </Router>
@@ -56,4 +55,3 @@ function App() {
 }
 
 export default App;
-
