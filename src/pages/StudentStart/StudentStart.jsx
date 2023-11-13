@@ -55,9 +55,8 @@ function StudentStart() {
             user.setIsRecruiter(false)
             user.setEventID("")
             
-
             // const user = userCredential.user;
-            window.location.href = '/home';
+            navigate('/home');
         })
         .catch((error) => {
             console.log(error)

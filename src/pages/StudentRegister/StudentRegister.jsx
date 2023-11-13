@@ -3,7 +3,7 @@ import { ChakraProvider, Box, Text, Input, Button, VStack } from '@chakra-ui/rea
 import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../../store';
 
 import './StudentRegister.css';  // Importing your external CSS
@@ -16,8 +16,11 @@ function StudentRegister() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+
+    // Use for navigation
+    const navigate = useNavigate();
     
-    // Fucntion to handle form submission to firebase
+    // Function to handle form submission to firebase
     const handleSubmit = async (e) => {
         // Prevent default form submission behaviour
         // Stops the page from reloading whenever button is clicked
@@ -69,7 +72,7 @@ function StudentRegister() {
                             year: ""
                         })
                     .then(() => { // redirect to /home after data logged
-                        window.location.href = '/home';
+                        navigate('/home');
                     })
             })
             .catch((e) => { // handle sign-up errors
