@@ -21,11 +21,7 @@ function Home() {
 
     // Check if its a recruiter
     const handleViewEvent = () => {
-        if (!user.isRecruiter) {
-            navigate('/CurrEventStudent');
-        } else {
-            navigate('/current-event-company');
-        }
+        navigate('/current-event')
     };
 
     return (
