@@ -4,11 +4,13 @@ import { auth, db } from '../../firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { Link } from 'react-router-dom';
-import { useStore } from '../../store';
+import { userStore } from '../../store';
 
 import './StudentRegister.css';  // Importing your external CSS
 
 function StudentRegister() {
+    const user = userStore((state) => state)
+
     // State variables to hold form inputs like email, password, confirmpassword
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -50,9 +52,9 @@ function StudentRegister() {
         }, 500);                                        // update every 500ms
         createUserWithEmailAndPassword(auth, email, password)
             .then(() => { // on success, log the type of user
-                useStore.getState().setEmail(email);
-                useStore.getState().setIsRecruiter(false);
-                useStore.getState().setCurrentEventID("");
+                user.setEmail(email)
+                user.setIsRecruiter(false)
+                user.setEventID("")
                 
                 setDoc(doc(db, 'studentProfiles', email), {
                             college: "",

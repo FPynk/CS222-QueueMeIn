@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './RecruiterStart.css';
-import { useStore } from '../../store'
+import { userStore } from '../../store'
 import { auth } from '../../firebase'
-import {  signInWithEmailAndPassword   } from 'firebase/auth';
+import { signInWithEmailAndPassword   } from 'firebase/auth';
 
 function RecruiterStart() {
+    const user = userStore((state) => state)
+    
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
   
@@ -47,14 +49,12 @@ function RecruiterStart() {
         //firebase sign in 
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => { // redirect to /home after signin success
-            useStore.getState().setEmail(email);
-            useStore.getState().setIsRecruiter(false);
-            useStore.getState().setCurrentEventID("");
+            user.setEmail(email)
+            user.setIsRecruiter(true)
+            user.setEventID("")
             
             clearInterval(intervalId);
-            const user = userCredential.user;
             window.location.href = '/home';
-            console.log(user);
         })
         .catch((error) => {
             clearInterval(intervalId);

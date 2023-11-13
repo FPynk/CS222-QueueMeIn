@@ -3,9 +3,11 @@ import NavBar from '../NavBar';
 import React, { useState } from 'react';
 import { db } from '../../firebase';
 import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
-import { useStore } from '../../store';
+import { userStore } from '../../store';
 
 function Home() {
+    const user = userStore((state) => state)
+    
     const navigate = useNavigate();
     const [fairs, setFairs] = useState([])
 
@@ -18,9 +20,8 @@ function Home() {
     });
 
     // Check if its a recruiter
-    const isRecruiter = useStore.getState().isRecruiter;
     const handleViewEvent = () => {
-        if (!isRecruiter) {
+        if (!user.isRecruiter) {
             navigate('/CurrEventStudent');
         } else {
             navigate('/current-event-company');
@@ -30,7 +31,7 @@ function Home() {
     return (
         <div>
             <div className="flex justify-center">
-                <NavBar />
+                <NavBar unsubscribe={unsubscribe}/>
             </div>
 
             <div className="mt-16 text-left">
