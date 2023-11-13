@@ -12,7 +12,7 @@ import RecruiterProfile from './pages/RecruiterProfile/RecruiterProfile';
 import StudentRegister from './pages/StudentRegister/StudentRegister';
 import StudentProfile from './pages/StudentProfile/StudentProfile';
 import CurrEventStudent from './pages/CurrEventStudent/CurrEventStudent';
-import CurrentEventCompany from './pages/CurrEventCompany/CurrEventCompany';
+import CurrEventCompany from './pages/CurrEventCompany/CurrEventCompany';
 
 function App() {
     const user = userStore((state) => state)
@@ -44,8 +44,8 @@ function App() {
                     <Route path="/recruiter-start" element={<RecruiterStart />} />
                     <Route path="/recruiter-register" element={<RecruiterRegister />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/CurrEventStudent" element={<CurrEventStudent />} />
-                    <Route path="/current-event-company" element={<CurrentEventCompany />} />
+                    <Route path="/current-event" element={(user.isRecruiter)?
+                        <CurrEventCompany/> : <CurrEventStudent />} />
                     <Route path="/profile" element={(user.isRecruiter)?
                         <RecruiterProfile /> : <StudentProfile />} />
                 </Routes>

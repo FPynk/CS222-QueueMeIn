@@ -53,8 +53,8 @@ function RecruiterStart() {
             user.setIsRecruiter(true)
             user.setEventID("")
             
-            clearInterval(intervalId);
-            window.location.href = '/home';
+            clearInterval(intervalId)
+            navigate('/home')
         })
         .catch((error) => {
             clearInterval(intervalId);

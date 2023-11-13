@@ -3,7 +3,7 @@ import { ChakraProvider, Box, Text, Input, Button, VStack } from '@chakra-ui/rea
 import { db, auth } from '../../firebase';
 import { setDoc, doc } from 'firebase/firestore'
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './RecruiterRegister.css';  // Importing your external CSS
 import { userStore } from "../../store"
 
@@ -16,6 +16,9 @@ function RecruiterRegister() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     
+    // Use for navigation
+    const navigate = useNavigate();
+
     // Function to handle form submission to firebase
     const handleSubmit = async (e) => {
         // Prevent default form submission behaviour
@@ -68,7 +71,7 @@ function RecruiterRegister() {
                             website: ""
                         })
                     .then(() => { // redirect to /home after data logged
-                        window.location.href = '/home';
+                        navigate('/home')
                     })
             })
             .catch((e) => { // handle sign-up errors
