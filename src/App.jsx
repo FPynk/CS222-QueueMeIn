@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-import './App.css';
+import styles from './App.css';
 import { userStore } from "./store"
 
 import Home from './pages/Home/Home';
@@ -22,21 +22,23 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={
-                        <div className="container">
+                        <div className={styles.container}>
                             <h1 className="welcome-text">Welcome to QueueMeIn</h1>
                             <p className="sub-text">What are you?</p>
                             
-                            <Link to="/student-start">
-                                <button className="btn btn-red">
-                                    Student
-                                </button>
-                            </Link>
-
-                            <Link to="/recruiter-start">
-                                <button className="btn btn-blue">
-                                    Recruiter
-                                </button>
-                            </Link>
+                            <div align="center">
+                                <Link to="/student-start">
+                                    <button className="btn btn-red">
+                                        Student
+                                    </button>
+                                </Link>
+                                <p className="small-space">&nbsp;</p>
+                                <Link to="/recruiter-start">
+                                    <button className="btn btn-blue">
+                                        Recruiter
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
                     } />
                     <Route path="/student-start" element={<StudentStart />} />
