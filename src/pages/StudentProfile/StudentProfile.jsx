@@ -22,55 +22,65 @@ import {
     DeleteIcon, ChevronDownIcon, ChevronUpIcon, AddIcon
 } from '@chakra-ui/icons'
 
+import { userStore } from '../../store'
 
-function StudentProfile(info) {
+import NavBar from '../NavBar'
 
-    const [studentName, setStudentName] = useState('')
+
+function StudentProfile() {
+
+  const user = userStore((state) => state)
+
+    const [name, setName] = useState('')
     const [college, setCollege] = useState('')
     const [year, setYear] = useState('')
     const [major, setMajor] = useState('')
     const [gpa, setGpa] = useState('')
-    const [email, setEmail] = useState('')
-    const [phoneNumber, setPhoneNumber] = useState('')
-    const [websiteLink, setWebsiteLink] = useState('')
+    const [resume, setResume] = useState('')
+    const [phone, setPhone] = useState('')
+    const [website, setWebsite] = useState('')
+    
 
-    // const profileRef = doc(db,"studentProfiles", info.email)
+    const studentProfileRef = doc(db,"studentProfiles", user.email)
 
 
-    // useEffect(() => {
-    //     getDoc(profileRef)
-    //         .then((doc) => {
-    //             let profile = doc.data()
-    //             setStudentName(profile.studentName)
-    //             setCollege(profile.college)
-    //             setYear(profile.year)
-    //             setMajor(profile.major)
-    //             setGpa(profile.gpa)
-    //             setEmail(profile.email)
-    //             setPhoneNumber(profile.phoneNumber)
-    //             setWebsiteLink(profile.websiteLink)
-    //         })
-    // }, [])
+    useEffect(() => {
+        getDoc(studentProfileRef)
+            .then((doc) => {
+                let profile = doc.data()
+                setName(profile.name)
+                setCollege(profile.college)
+                setYear(profile.year)
+                setMajor(profile.major)
+                setGpa(profile.gpa)
+                setPhone(profile.phone)
+                setWebsite(profile.website)
+                setResume(profile.resume)
+            })
+    }, [])
 
-    // const submitStudentPage = () => {
-    //     updateDoc(profileRef, {
-    //         studentName: studentName,
-    //         college: college,
-    //         year: year,
-    //         major: major,
-    //         gpa: gpa,
-    //         email: email,
-    //         phoneNumber: phoneNumber,
-    //         websiteLink: websiteLink
-    //     })
-    //     .then(() => {
-    //         alert("profile updated")
-    //     })
-    // }
+    const submitStudentPage = () => {
+        updateDoc(studentProfileRef, {
+            name: name,
+            college: college,
+            year: year,
+            major: major,
+            gpa: gpa,
+            phone: phone,
+            website: website,
+            resume: resume,
+            phone: phone,
+            website: website
+        })
+        .then(() => {
+            alert("profile updated")
+        })
+    }
 
   return (
 
     <div>
+      <Center><NavBar></NavBar></Center>
       <Center > <Text fontSize='50px'>Student Profile </Text> </Center>
 
 {/*BASIC INFORMATION SECTION */}
@@ -81,18 +91,18 @@ function StudentProfile(info) {
     
 
     <VStack>
-        <Input placeholder="Name"  />
-            {/* // onInput={(e) => setStudentName(e.target.value)}/> */}
-        <Input placeholder="College" />
-            {/* // onInput={(e) => setChone(e.target.value)}/> */}
-        <Input placeholder="Year" />
-        {/* // onInput={(e) => setYear(e.target.value)}/> */}
-        <Input placeholder="Major" />
-        {/* // onInput={(e) => setMajor(e.target.value)}/> */}
-        <Input placeholder="GPA" />
-        {/* // onInput={(e) => setGpa(e.target.value)}/> */}
-        <Input placeholder="Resume" />
-        {/* // onInput={(e) => setResume(e.target.value)}/> */}
+        <Input placeholder="Name" defaultValue={name}  
+          onInput={(e) => setName(e.target.value)}/>
+        <Input placeholder="College" defaultValue={college}
+          onInput={(e) => setCollege(e.target.value)}/>
+        <Input placeholder="Year" defaultValue={year}
+          onInput={(e) => setYear(e.target.value)}/> 
+        <Input placeholder="Major" defaultValue={major}
+          onInput={(e) => setMajor(e.target.value)}/> 
+        <Input placeholder="GPA" defaultValue={gpa}
+          onInput={(e) => setGpa(e.target.value)}/> 
+        <Input placeholder="Resume" defaultValue={resume}
+          onInput={(e) => setResume(e.target.value)}/>
     </VStack>
 
 
@@ -102,13 +112,13 @@ function StudentProfile(info) {
       </Center>
 
       <VStack>
-        <Input placeholder="Email" />
-        {/* // onInput={(e) => setEmaile(e.target.value)}/> */}
-        <Input placeholder="Phone Number" />
-            {/* // onInput={(e) => setPhoneNumber(e.target.value)}/> */}
-        <Input placeholder="Website Link" />
-            {/* // onInput={(e) => setWebsite(e.target.value)}/> */}
+        <Input placeholder="Phone Number" defaultValue={phone}
+          onInput={(e) => setPhone(e.target.value)}/> 
+        <Input placeholder="Website Link" defaultValue={website}
+          onInput={(e) => setWebsite(e.target.value)}/> 
       </VStack>
+
+      <Center> <Button px="85px" colorScheme="green" onClick={() => submitStudentPage()}>Update Profile</Button> </Center>
 
     </div>
   );
