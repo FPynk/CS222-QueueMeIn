@@ -2,8 +2,18 @@ import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './RecruiterStart.css';
 import { userStore } from '../../store'
-import { auth } from '../../firebase'
+import { db, auth } from '../../firebase'
+import { getDoc, doc } from 'firebase/firestore'
 import { signInWithEmailAndPassword   } from 'firebase/auth';
+
+async function checkRegisteredRecruiter(email) {
+    let ans = false;
+    await getDoc(doc(db, "recruiterProfiles", email))
+        .then((doc) => { // checks if email is registered to a recruiter account
+            ans = (doc.data() != undefined)
+        })
+    return ans;
+}
 
 function RecruiterStart() {
     const user = userStore((state) => state)
@@ -25,7 +35,7 @@ function RecruiterStart() {
         setPassword(e.target.value);
     };
   
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailRegex.test(email)) {
             setLoginError('Invalid email address');
@@ -45,22 +55,28 @@ function RecruiterStart() {
             counter = (counter + 1) % 3;   // Cycle from 0 to 2
         }, 500);                           // Update every 500ms
 
-        // TODO: Add your actual login check logic here
-        //firebase sign in 
-        signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => { // redirect to /home after signin success
-            user.setEmail(email)
-            user.setIsRecruiter(true)
-            user.setEventID("")
-            
-            clearInterval(intervalId)
-            navigate('/home')
-        })
-        .catch((error) => {
+        //firebase sign in
+        let registered = await checkRegisteredRecruiter(email)
+        if(!registered) {
             clearInterval(intervalId);
-            setLoginError('Invalid Email or Password');
-            setPassword('');
-        });
+            setLoginError('Not a recruiter registered email')
+            return;
+        } else {
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => { // redirect to /home after signin success
+                user.setEmail(email)
+                user.setIsRecruiter(true)
+                user.setEventID("")
+                
+                clearInterval(intervalId)
+                navigate('/home')
+            })
+            .catch((error) => {
+                clearInterval(intervalId);
+                setLoginError('Invalid Email or Password');
+                setPassword('');
+            });
+        }
     };
   
     const handleInputKeyPress = (e) => {
