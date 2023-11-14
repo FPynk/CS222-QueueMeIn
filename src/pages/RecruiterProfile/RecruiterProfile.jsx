@@ -154,9 +154,9 @@ function RecruiterProfile() {
         <div className="h-screen flex flex-col items-center">
             <NavBar/>
             <Box className="app-container">
-                <Text className="app-name center" align="center" fontSize="3xl" >Profile</Text>
+                <Text className="app-name center" align="center" fontSize='50px'>Recruiter Profile</Text>
                 <VStack>
-                    <Text className="header" fontSize="xl" as='u'>Company Information</Text>
+                    <Text className="header" fontSize='20'>Company Information</Text>
                     <VStack>
                         <Input placeholder="Company Name" defaultValue={companyName}
                             onInput={(e) => setCompanyName(e.target.value)}/>
@@ -167,14 +167,14 @@ function RecruiterProfile() {
                         <Input placeholder="Company Website" type="url" defaultValue={website}
                             onInput={(e) => setWebsite(e.target.value)}/>
                     </VStack>
-                    <Text fontSize="xl" as='u'>Recruiter Information</Text>
+                    <Text fontSize='20'>Recruiter Information</Text>
                     <VStack>
                         <Input placeholder="Recruiter Name" defaultValue={recruiterName}
                             onInput={(e) => setRecruiterName(e.target.value)}/>
                         <Input placeholder="Recruiter Phone" type="tel" defaultValue={phone}
                             onInput={(e) => setPhone(e.target.value)}/>
                     </VStack>
-                    <Text fontSize="xl" as='u'>Available Positions</Text>
+                    <Text fontSize='20'>Available Positions</Text>
                     <Accordion allowMultiple="true">
                         {jobs.map((item, index) => 
                             <JobListing key={index} info={item} deleteJob={() => deleteJob(index)}
