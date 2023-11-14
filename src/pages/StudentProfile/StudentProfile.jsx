@@ -3,6 +3,7 @@ import { Center, ChakraProvider, Box, Text, Input, Button, VStack, IconButton } 
 import { db } from '../../firebase';
 import { query, where, getDocs, addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
+import NavBar from '../NavBar';
 
 import {
   Editable,
@@ -71,6 +72,9 @@ function StudentProfile(info) {
   return (
 
     <div>
+        <div className="flex justify-center">
+            <NavBar/>
+        </div>
       <Center > <Text fontSize='50px'>Student Profile </Text> </Center>
 
 {/*BASIC INFORMATION SECTION */}
