@@ -25,9 +25,6 @@ import {
 
 import { userStore } from '../../store'
 
-import NavBar from '../NavBar'
-
-
 function StudentProfile() {
 
   const user = userStore((state) => state)

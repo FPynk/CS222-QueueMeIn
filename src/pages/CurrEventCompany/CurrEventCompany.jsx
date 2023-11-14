@@ -1,23 +1,29 @@
 import React, { useState, useEffect} from 'react';
 import NavBar from '../NavBar';
 import { db } from '../../firebase';
-import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
 import { userStore } from '../../store';
 
+
 const CurrEventCompany = () => {
+    const fairId = userStore((state) => state.eventID);
     const [queue, setQueue] = useState([]);
-
-
-    const email = 'recruiter@gmail.com'; // temp
-    const unsubscribe = onSnapshot(collection(db, `recruiterProfiles/${email}/queue`), (snapshot) => {
-        const qList = [];
-        snapshot.forEach((doc) => {
-            qList.push(doc.data());
-        });
-        setQueue(qList)
-    });
-
     const [currentStudentIndex, setCurrentStudentIndex] = useState(0);
+
+    const getStudentProfile = async (email) => {
+        const docRef = doc(db, "studentProfiles", email);
+        try {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                return docSnap.data();
+            } else {
+                console.log("No such document!");
+            }
+        } catch (error) {
+            console.error("Error fetching student profile: ", error);
+        }
+        return null;
+    };
 
     const removeCurrentStudent = () => {
         if (queue.length > 0) {
@@ -40,7 +46,7 @@ const CurrEventCompany = () => {
 
     return (
         <div className="h-screen flex flex-col items-center">
-            <NavBar unsubscribe={unsubscribe}/>
+            <NavBar/>
             <div className="mt-4">
                 <h1 className="text-3xl font-semibold text-center">Current Student:</h1>
                 {queue.length > 0 ? (
