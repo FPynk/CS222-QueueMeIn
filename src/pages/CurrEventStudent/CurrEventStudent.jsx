@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ChakraProvider, Box, Text, Button, Flex, Spacer, Accordion, AccordionItem, AccordionButton, AccordionPanel } from '@chakra-ui/react';
+import { ChakraProvider, Box, Text, Button, Flex, Spacer, Accordion, AccordionItem, AccordionButton, AccordionPanel, Center } from '@chakra-ui/react';
 import { db } from '../../firebase';
 import { query, where, getDocs, addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import CurrEventStudent from './CurrEventStudent.module.css'; // Import the styles
 import { useLocation } from 'react-router-dom';
+import { userStore } from '../../store';
+import NavBar from '../NavBar'
 
 function StudentView() {
     // grab fair ID to grab info ltr
-    const location = useLocation();
-    const { fairId } = location.state;
+    const fairId = userStore((state) => state.eventID);
 
     // State to manage the company currently in the queue
     const [currentCompany, setCurrentCompany] = useState(null);
@@ -128,17 +129,10 @@ function StudentView() {
     };
 
     return (
-        <ChakraProvider>
-        <Box>
-            <Flex className={CurrEventStudent.navbar} alignItems="center">
-            <Text>QueueMeIn</Text>
-            <Spacer />
-            {/* TODO FRONTEND: LINK TO RESPECTIVE PAGES */}
-            <Button mx={2}>Home</Button>
-            <Button mx={2}>Profile</Button>
-            <Button mx={2}>Log out</Button>
-            </Flex>
 
+        <ChakraProvider>
+            <Center><NavBar></NavBar></Center>
+        <Box>
             <Box className={CurrEventStudent.mainBody}>
             <Text fontSize="2xl" mb={4}>Available Companies</Text>
             {/* Accordian to vertically stack companies and allow for dropdown for qualifications */}
