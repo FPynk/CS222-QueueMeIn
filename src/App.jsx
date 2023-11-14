@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import './App.css';
-import { useStore } from "./store"
+import { userStore } from "./store"
 
 import Home from './pages/Home/Home';
 import StudentStart from './pages/StudentStart/StudentStart';
@@ -12,11 +12,10 @@ import RecruiterProfile from './pages/RecruiterProfile/RecruiterProfile';
 import StudentRegister from './pages/StudentRegister/StudentRegister';
 import StudentProfile from './pages/StudentProfile/StudentProfile';
 import CurrEventStudent from './pages/CurrEventStudent/CurrEventStudent';
-import CurrentEventCompany from './pages/CurrEventCompany/CurrEventCompany';
+import CurrEventCompany from './pages/CurrEventCompany/CurrEventCompany';
 
 function App() {
-    useStore.getState().setEmail("jd@email.com");
-    useStore.getState().setIsRecruiter(true);
+    const user = userStore((state) => state)
 
     return (
         <ChakraProvider>
@@ -45,9 +44,9 @@ function App() {
                     <Route path="/recruiter-start" element={<RecruiterStart />} />
                     <Route path="/recruiter-register" element={<RecruiterRegister />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/CurrEventStudent" element={<CurrEventStudent />} />
-                    <Route path="/current-event-company" element={<CurrentEventCompany />} />
-                    <Route path="/profile" element={(useStore.getState().isRecruiter)?
+                    <Route path="/current-event" element={(user.isRecruiter)?
+                        <CurrEventCompany/> : <CurrEventStudent />} />
+                    <Route path="/profile" element={(user.isRecruiter)?
                         <RecruiterProfile /> : <StudentProfile />} />
                 </Routes>
             </Router>
@@ -56,4 +55,3 @@ function App() {
 }
 
 export default App;
-

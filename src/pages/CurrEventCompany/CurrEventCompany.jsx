@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NavBar from '../NavBar';
 
-function CurrentEventCompany() { // Purely for testing
+function CurrEventCompany() { // Purely for testing
     const [queue, setQueue] = useState([
         {
             name: 'Bob Bobby',
@@ -77,4 +77,4 @@ function CurrentEventCompany() { // Purely for testing
     );
 }
 
-export default CurrentEventCompany;
+export default CurrEventCompany;

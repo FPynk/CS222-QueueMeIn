@@ -9,7 +9,7 @@ import {
 
 import { db } from '../../firebase';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
-import { useStore } from '../../store'
+import { userStore } from '../../store'
 import NavBar from '../NavBar'
 
 function JobListing(listing) {
@@ -93,6 +93,8 @@ function JobListing(listing) {
 }
 
 function RecruiterProfile() {
+    const user = userStore((state) => state)
+    
     const [companyName, setCompanyName] = useState('')
     const [industry, setIndustry] = useState('')
     const [description, setDescription] = useState('')
@@ -101,7 +103,7 @@ function RecruiterProfile() {
     const [phone, setPhone] = useState('')
     const [jobs, setJobs] = useState([])
     
-    const profileRef = doc(db, "recruiterProfiles", useStore.getState().email)
+    const profileRef = doc(db, "recruiterProfiles", user.email)
 
     //fill in data from firebase, document is created on sign-up
     useEffect(() => {
@@ -144,7 +146,7 @@ function RecruiterProfile() {
             jobs: jobs
         })
             .then(() => {
-                alert("profile updated")
+                alert("Your profile has been successfully updated.")
             })
     }
 
@@ -187,7 +189,7 @@ function RecruiterProfile() {
                             </AccordionButton>
                         </AccordionItem>
                     </Accordion>
-                    <Button px="85px" colorScheme="green" onClick={() => submitRecruiterPage()}>Submit</Button>
+                    <Button px="85px" colorScheme="green" onClick={() => submitRecruiterPage()}>Update Profile</Button>
                 </VStack>
             </Box>
         </div>

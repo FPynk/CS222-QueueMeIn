@@ -3,17 +3,22 @@ import { ChakraProvider, Box, Text, Input, Button, VStack } from '@chakra-ui/rea
 import { db, auth } from '../../firebase';
 import { setDoc, doc } from 'firebase/firestore'
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './RecruiterRegister.css';  // Importing your external CSS
-import { useStore } from "../../store"
+import { userStore } from "../../store"
 
 function RecruiterRegister() {
+    const user = userStore((state) => state)
+
     // State variables to hold form inputs like email, password, confirmpassword
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     
+    // Use for navigation
+    const navigate = useNavigate();
+
     // Function to handle form submission to firebase
     const handleSubmit = async (e) => {
         // Prevent default form submission behaviour
@@ -51,9 +56,9 @@ function RecruiterRegister() {
         // Create account with Firestore Authentication
         createUserWithEmailAndPassword(auth, email, password)
             .then(() => { // on success, create profile structure in database
-                useStore.getState().setEmail(email);
-                useStore.getState().setIsRecruiter(true);
-                useStore.getState().setCurrentEventID("");
+                user.setEmail(email)
+                user.setIsRecruiter(true)
+                user.setEventID("")
 
                 setDoc(doc(db, 'recruiterProfiles', email), {
                             jobs: [],
@@ -66,7 +71,7 @@ function RecruiterRegister() {
                             website: ""
                         })
                     .then(() => { // redirect to /home after data logged
-                        window.location.href = '/home';
+                        navigate('/home')
                     })
             })
             .catch((e) => { // handle sign-up errors
