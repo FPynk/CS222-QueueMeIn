@@ -1,4 +1,4 @@
-.recruiterRegisterContainer {
+.studentRegisterContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,7 +31,7 @@
 }
 
 .inputGroup {
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .inputField {

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './RecruiterStart.css';
+import styles from'./RecruiterStart.module.css';
 import { userStore } from '../../store'
 import { db, auth } from '../../firebase'
 import { getDoc, doc } from 'firebase/firestore'
@@ -87,25 +87,25 @@ function RecruiterStart() {
 
 
     return (
-        <div className="h-screen-flex">
-            <h1 className="text-8xl-center">QueueMeIn</h1>
-            <p className="text-3xl-center">Recruiter Login</p>
+        <div className={styles['h-screen-flex']}>
+            <h1 className={styles['text-8xl-center']}>QueueMeIn</h1>
+            <p className={styles['text-3xl-center']}>Recruiter Login</p>
             <button
                 onClick={() => navigate('/')}
-                className="top-left-button"
+                className={styles['top-left-button']}
             >
                 Back
             </button>
 
-            <div className="mt-8">
+            <div className={styles['mt-8']}>
                 <Link to="/recruiter-register">
-                    <button className="mt-8-button">
+                    <button className={styles['mt-8-button']}>
                         Sign Up
                     </button>
                 </Link>
             </div>
 
-            <div className="mt-4">
+            <div className={styles['mt-4']}>
                 <input
                     type="text"
                     ref={emailRef}
@@ -113,11 +113,11 @@ function RecruiterStart() {
                     value={email}
                     onChange={handleEmailChange}
                     onKeyUp={handleInputKeyPress}
-                    className="input-box"
+                    className={styles['input-box']}
                 />
             </div>
 
-            <div className="mt-4">
+            <div className={styles['mt-4']}>
                 <input
                     type="password"
                     ref={passwordRef}
@@ -125,17 +125,17 @@ function RecruiterStart() {
                     value={password}
                     onChange={handlePasswordChange}
                     onKeyUp={handleInputKeyPress}
-                    className="input-box"
+                    className={styles['input-box']}
                 />
             </div>
 
             {loginError && (
-                <div className="text-red">{loginError}</div>
+                <div className={styles['text-red']}>{loginError}</div>
             )}
 
-            <div className="mt-4">
+            <div className={styles['mt-4']}>
                 <button
-                    className="mt-4-button"
+                    className={styles['mt-4-button']}
                     onClick={handleLogin}
                 >
                     Login
