@@ -24,15 +24,17 @@ function Home() {
     });
 
     // Check if its a recruiter
-    // pass fair id along for use later
-    const isRecruiter = useStore((state) => state.isRecruiter);
+    // pass fair id along for use later in userstore
+    // const isRecruiter = userStore((state) => state.isRecruiter);
     const handleViewEvent = (fairId) => {
         console.log('Navigating to event with fairId:', fairId);
-        if (isRecruiter) {
-            navigate('/CurrEventStudent', { state: { fairId } });
-        } else {
-            navigate('/current-event-company', { state: { fairId } });
-        }
+        user.setEventID(fairId);
+        navigate('/current-event');
+        // if (!isRecruiter) {
+        //     navigate('/CurrEventStudent', { state: { fairId } });
+        // } else {
+        //     navigate('/current-event-company', { state: { fairId } });
+        // }
     };
 
     return (

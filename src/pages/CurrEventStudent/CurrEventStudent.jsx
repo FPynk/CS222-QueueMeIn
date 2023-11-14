@@ -5,11 +5,11 @@ import { query, where, getDocs, addDoc, collection, doc, getDoc, updateDoc } fro
 import { Link } from 'react-router-dom';
 import CurrEventStudent from './CurrEventStudent.module.css'; // Import the styles
 import { useLocation } from 'react-router-dom';
+import { userStore } from '../../store';
 
 function StudentView() {
     // grab fair ID to grab info ltr
-    const location = useLocation();
-    const { fairId } = location.state;
+    const fairId = userStore((state) => state.eventID);
 
     // State to manage the company currently in the queue
     const [currentCompany, setCurrentCompany] = useState(null);
