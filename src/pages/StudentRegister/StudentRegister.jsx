@@ -6,7 +6,7 @@ import { setDoc, doc } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../../store';
 
-import './StudentRegister.css';  // Importing your external CSS
+import styles from './StudentRegister.module.css';  // Importing your external CSS
 
 function StudentRegister() {
     const user = userStore((state) => state)
@@ -83,44 +83,50 @@ function StudentRegister() {
     }
 
     return (
-        <ChakraProvider>
-            <Box className="studentRegisterContainer">
-                <Link to="/student-start" className="backButton">
-                    Back
-                </Link>
-                <Text className="title">QueueMeIn</Text>
-                <Text className="subTitle">Student Sign Up</Text>
-                <VStack spacing={4} className="inputGroup">
-                    <Input
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="inputField"
-                    />
-                    <Input
-                        placeholder="Password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="inputField"
-                    />
-                    <Input
-                        placeholder="Confirm Password"
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="inputField"
-                    />
-                    <Button
-                        onClick={handleSubmit}
-                        className="submitButton"
-                    >
-                        Create Account
-                    </Button>
-                    {errorMessage && <Text className="errorMessage">{errorMessage}</Text>}
-                </VStack>
-            </Box>
-        </ChakraProvider>
+        <div className={styles.studentRegisterContainer}>
+          <Link to="/student-start" className={styles.backButton}>
+            Back
+          </Link>
+          <h1 className={styles.title}>QueueMeIn</h1>
+          <h2 className={styles.subTitle}>Student Sign Up</h2>
+          <div className={styles.inputGroup}>
+                <input
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={styles.inputField}
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <input
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={styles.inputField}
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <input
+                placeholder="Confirm Password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={styles.inputField}
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <button
+                    onClick={handleSubmit}
+                    className={styles.submitButton}
+                >
+                    Create Account
+                </button>
+            </div>
+            <div className={styles.inputGroup}>
+                {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+          </div>
+        </div>
     );
 }
 

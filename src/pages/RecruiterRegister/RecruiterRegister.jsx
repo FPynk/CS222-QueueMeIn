@@ -4,7 +4,7 @@ import { db, auth } from '../../firebase';
 import { setDoc, doc } from 'firebase/firestore'
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { Link, useNavigate } from 'react-router-dom';
-import './RecruiterRegister.css';  // Importing your external CSS
+import styles from './RecruiterRegister.module.css';  // Importing your external CSS
 import { userStore } from "../../store"
 
 function RecruiterRegister() {
@@ -82,44 +82,50 @@ function RecruiterRegister() {
     }
 
     return (
-        <ChakraProvider>
-            <Box className="recruiterRegisterContainer">
-                <Link to="/recruiter-start" className="backButton">
-                    Back
-                </Link>
-                <Text className="title">QueueMeIn</Text>
-                <Text className="subTitle">Recruiter Sign Up</Text>
-                <VStack spacing={4} className="inputGroup">
-                    <Input
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="inputField"
-                    />
-                    <Input
-                        placeholder="Password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="inputField"
-                    />
-                    <Input
-                        placeholder="Confirm Password"
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="inputField"
-                    />
-                    <Button
-                        onClick={handleSubmit}
-                        className="submitButton"
-                    >
-                        Create Account
-                    </Button>
-                    {errorMessage && <Text className="errorMessage">{errorMessage}</Text>}
-                </VStack>
-            </Box>
-        </ChakraProvider>
+        <div className={styles.studentRegisterContainer}>
+          <Link to="/recruiter-start" className={styles.backButton}>
+            Back
+          </Link>
+          <h1 className={styles.title}>QueueMeIn</h1>
+          <h2 className={styles.subTitle}>Recruiter Sign Up</h2>
+          <div className={styles.inputGroup}>
+                <input
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={styles.inputField}
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <input
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={styles.inputField}
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <input
+                placeholder="Confirm Password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={styles.inputField}
+                />
+            </div>
+            <div className={styles.inputGroup}>
+                <button
+                    onClick={handleSubmit}
+                    className={styles.submitButton}
+                >
+                    Create Account
+                </button>
+            </div>
+            <div className={styles.inputGroup}>
+                {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+          </div>
+        </div>
     );
 }
 
