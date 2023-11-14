@@ -3,6 +3,7 @@ import { Center, ChakraProvider, Box, Text, Input, Button, VStack, IconButton } 
 import { db } from '../../firebase';
 import { query, where, getDocs, addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
+import NavBar from '../NavBar';
 
 import {
   Editable,
@@ -23,9 +24,6 @@ import {
 } from '@chakra-ui/icons'
 
 import { userStore } from '../../store'
-
-import NavBar from '../NavBar'
-
 
 function StudentProfile() {
 
