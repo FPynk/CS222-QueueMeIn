@@ -112,6 +112,7 @@ function StudentView() {
                 updatedQueue.push(studentEmail); // Add student to queue
             }
             console.log("Before update - currentCompany:", currentCompany, "index:", index);
+            console.log("Conditional", currentCompany === index);
             // Toggle currentCompany state
             if (currentCompany === index) {
                 setCurrentCompany(null); // Remove from queue
@@ -119,7 +120,6 @@ function StudentView() {
                 setCurrentCompany(index); // Add to queue
             }
             await updateDoc(companyDocRef, { queue: updatedQueue });
-            setCurrentCompany(index);
             setQueueCount(updatedQueue.length);
             console.log("After update - currentCompany:", currentCompany);
         } catch (error) {
@@ -154,7 +154,7 @@ function StudentView() {
                         {/* Queue Status Display */}
                         {currentCompany  === index && 
                         <Text mr = {4}>
-                            {queueCount === 0 ? 'You are Up' : `${queueCount} people in front`}
+                            {queueCount <= 1 ? 'You are Up' : `${queueCount - 1} people in front`}
                         </Text>
                         }
                         {/* Button to add/ remove to Queue */}
