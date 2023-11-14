@@ -1,27 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import NavBar from '../NavBar';
+import { db } from '../../firebase';
+import { doc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
+import { userStore } from '../../store';
 
-function CurrEventCompany() { // Purely for testing
-    const [queue, setQueue] = useState([
-        {
-            name: 'Bob Bobby',
-            major: 'Computer Science',
-            year: 'Junior',
-            resume: 'Sample resume content',
-        },
-        {
-            name: 'Joe Mama',
-            major: 'Mathematics',
-            year: 'Sophomore',
-            resume: 'Another sample resume',
-        },
-        {
-            name: 'Lastin Que',
-            major: 'Engineering',
-            year: 'Senior',
-            resume: 'One more sample resume',
-        },
-    ]);
+const CurrEventCompany = () => {
+    const [queue, setQueue] = useState([]);
+
+
+    const email = 'recruiter@gmail.com'; // temp
+    const unsubscribe = onSnapshot(collection(db, `recruiterProfiles/${email}/queue`), (snapshot) => {
+        const qList = [];
+        snapshot.forEach((doc) => {
+            qList.push(doc.data());
+        });
+        setQueue(qList)
+    });
+
     const [currentStudentIndex, setCurrentStudentIndex] = useState(0);
 
     const removeCurrentStudent = () => {
@@ -45,19 +40,21 @@ function CurrEventCompany() { // Purely for testing
 
     return (
         <div className="h-screen flex flex-col items-center">
-            <NavBar />
+            <NavBar unsubscribe={unsubscribe}/>
             <div className="mt-4">
                 <h1 className="text-3xl font-semibold text-center">Current Student:</h1>
                 {queue.length > 0 ? (
                     <div className="bg-gray-100 p-4 rounded-md cursor-pointer" onClick={() => showStudentStats(currentStudentIndex)}>
-                        <h2 className="text-lg font-semibold">{queue[currentStudentIndex].name}</h2>
-                        {currentStudentIndex === null ? null : (
                             <div>
-                                <p>Major: {queue[currentStudentIndex].major}</p>
-                                <p>Year: {queue[currentStudentIndex].year}</p>
-                                <p>Resume: {queue[currentStudentIndex].resume}</p>
+                                {queue.map(item => (
+                                    <div key={item.name}>
+                                    <p>Name: {item.name}</p>
+                                    <p>Major: {item.major}</p>
+                                    <p>Grade: {item.year}</p>
+                                    <p>Resume: {item.resume}</p>
+                                    </div>
+                                ))}
                             </div>
-                        )}
                     </div>
                 ) : (
                     <div className="bg-gray-100 p-4 rounded-md cursor-pointer" onClick={() => showStudentStats(null)}>
