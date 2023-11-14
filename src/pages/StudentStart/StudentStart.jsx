@@ -1,9 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './StudentStart.css';
-import { auth } from '../../firebase'
+import { db, auth } from '../../firebase'
+import { getDoc, doc } from 'firebase/firestore'
 import {  signInWithEmailAndPassword   } from 'firebase/auth';
 import { userStore } from '../../store'
+
+async function checkRegisteredStudent(email) {
+    let ans = false;
+    await getDoc(doc(db, "studentProfiles", email))
+        .then((doc) => { // checks if email is registered to a recruiter account
+            ans = (doc.data() != undefined)
+        })
+    return ans;
+}
 
 function StudentStart() {
     const user = userStore((state) => state)
@@ -48,22 +58,29 @@ function StudentStart() {
         // Actual login check logic here
         // Firebase sign in
         
-        signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => { // redirect to /home after signin success
+        let registered = await checkRegisteredStudent(email)
+        if(!registered) {
             clearInterval(intervalId);
-            user.setEmail(email)
-            user.setIsRecruiter(false)
-            user.setEventID("")
-            
-            // const user = userCredential.user;
-            navigate('/home');
-        })
-        .catch((error) => {
-            console.log(error)
-            clearInterval(intervalId);
-            setLoginError('Invalid Email or Password');
-            setPassword('');
-        });
+            setLoginError('Not a student registered email')
+            return; 
+        } else {
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => { // redirect to /home after signin success
+                clearInterval(intervalId);
+                user.setEmail(email)
+                user.setIsRecruiter(false)
+                user.setEventID("")
+                
+                // const user = userCredential.user;
+                navigate('/home');
+            })
+            .catch((error) => {
+                console.log(error)
+                clearInterval(intervalId);
+                setLoginError('Invalid Email or Password');
+                setPassword('');
+            });
+        }
     };
   
     const handleInputKeyPress = (e) => {
