@@ -11,6 +11,10 @@
     text-align: center;
 }
 
+.small-space {
+    font-size: 0rem;
+}
+
 .sub-text {
     font-size: 2rem;
     text-align: center;
