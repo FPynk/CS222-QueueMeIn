@@ -1,83 +1,110 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../NavBar';
 import { db } from '../../firebase';
-import { doc, getDoc, onSnapshot, query, where, getDocs, addDoc, collection } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { userStore } from '../../store';
 
-
 const CurrEventCompany = () => {
-    const fairId = userStore((state) => state.eventID);
-    const [queue, setQueue] = useState([]);
-    const [currentStudentIndex, setCurrentStudentIndex] = useState(0);
+    const [currentStudent, setCurrentStudent] = useState(null);
+    const recruiterEmail = userStore((state) => state.email);
 
-    const getStudentProfile = async (email) => {
-        const docRef = doc(db, "studentProfiles", email);
-        try {
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                return docSnap.data();
-            } else {
-                console.log("No such document!");
-            }
-        } catch (error) {
-            console.error("Error fetching student profile: ", error);
-        }
-        return null;
-    };
+    useEffect(() => {
+        const fetchQueue = async () => {
+            const recruiterRef = doc(db, 'recruiterProfiles', recruiterEmail);
+            const recruiterDoc = await getDoc(recruiterRef);
 
-    const removeCurrentStudent = () => {
-        if (queue.length > 0) {
-            const updatedQueue = [...queue];
-            updatedQueue.splice(currentStudentIndex, 1);
-            if (currentStudentIndex === queue.length - 1) {
-                setCurrentStudentIndex(0);
+            if (recruiterDoc.exists()) {
+                const queue = recruiterDoc.data().queue || [];
+
+                if (queue.length > 0) {
+                    const currentStudentEmail = queue[0];
+                    const studentRef = doc(db, 'studentProfiles', currentStudentEmail);
+                    const studentDoc = await getDoc(studentRef);
+                    if (studentDoc.exists()) {
+                        const studentData = studentDoc.data();
+                        setCurrentStudent(studentData);
+                    } else {
+                        setCurrentStudent(null);
+                    }
+                } else {
+                    setCurrentStudent(null);
+                }
             } else {
-                setCurrentStudentIndex(currentStudentIndex);
+                setCurrentStudent(null);
             }
-            setQueue(updatedQueue);
+        };
+
+        fetchQueue();
+    }, []);
+
+    const handleFinish = async () => {
+        const recruiterRef = doc(db, 'recruiterProfiles', recruiterEmail);
+        const recruiterDoc = await getDoc(recruiterRef);
+
+        if (recruiterDoc.exists()) {
+            await updateDoc(recruiterRef, {
+                queue: arrayRemove(recruiterDoc.data().queue[0])
+            });
+            const updatedRecruiterDoc = await getDoc(recruiterRef);
+            if (updatedRecruiterDoc.exists()) {
+                const updatedQueue = updatedRecruiterDoc.data().queue || [];
+                if (updatedQueue.length > 0) {
+                    const newCurrentStudentEmail = updatedQueue[0];
+                    const newStudentRef = doc(db, 'studentProfiles', newCurrentStudentEmail);
+                    const newStudentDoc = await getDoc(newStudentRef);
+                    if (newStudentDoc.exists()) {
+                        const newStudentData = newStudentDoc.data();
+                        setCurrentStudent(newStudentData);
+                    } else {
+                        setCurrentStudent(null);
+                    }
+                } else {
+                    setCurrentStudent(null);
+                }
+            } else {
+                setCurrentStudent(null);
+            }
         } else {
-            setCurrentStudentIndex(null);
+            setCurrentStudent(null);
         }
-    };
-
-    const showStudentStats = (index) => {
-        setCurrentStudentIndex(index);
     };
 
     return (
-        <div className="h-screen flex flex-col items-center">
-            <NavBar/>
-            <div className="mt-4">
-                <h1 className="text-3xl font-semibold text-center">Current Student:</h1>
-                {queue.length > 0 ? (
-                    <div className="bg-gray-100 p-4 rounded-md cursor-pointer" onClick={() => showStudentStats(currentStudentIndex)}>
-                            <div>
-                                {queue.map(item => (
-                                    <div key={item.name}>
-                                    <p>Name: {item.name}</p>
-                                    <p>Major: {item.major}</p>
-                                    <p>Grade: {item.year}</p>
-                                    <p>Resume: {item.resume}</p>
-                                    </div>
-                                ))}
-                            </div>
+        <div>
+            <div className="flex justify-center">
+                <NavBar />
+            </div>
+
+            <div className="flex justify-center mt-4">
+                {currentStudent ? (
+                    <div className="text-center p-4 border border-gray-300 rounded-lg text-lg">
+                        <h1 className="font-bold text-2xl mb-4">Current Student: {currentStudent.name}</h1>
+                        <p>College: {currentStudent.college}</p>
+                        <p>GPA: {currentStudent.gpa}</p>
+                        <p>Major: {currentStudent.major}</p>
+                        <p>Phone: {currentStudent.phone}</p>
+                        <p>Resume: {currentStudent.resume}</p>
+                        <p>Website: {currentStudent.website}</p>
+                        <p>Year: {currentStudent.year}</p>
                     </div>
                 ) : (
-                    <div className="bg-gray-100 p-4 rounded-md cursor-pointer" onClick={() => showStudentStats(null)}>
-                        <h2 className="text-lg font-semibold">Currently no students in Queue</h2>
+                    <div className="text-center p-4 border border-gray-300 rounded-lg text-lg">
+                        <h1 className="font-bold text-2xl mb-4">No students in queue.</h1>
                     </div>
                 )}
             </div>
-            <div className="mt-4">
+
+            <div className="flex justify-center mt-4">
                 <button
-                    onClick={removeCurrentStudent}
-                    className="bg-red-500 text-white px-4 py-2 rounded-md"
+                    onClick={handleFinish}
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                    disabled={!currentStudent}
                 >
                     Finish
                 </button>
             </div>
         </div>
     );
-}
+};
 
 export default CurrEventCompany;
