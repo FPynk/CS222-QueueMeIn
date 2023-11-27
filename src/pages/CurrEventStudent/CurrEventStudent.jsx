@@ -96,7 +96,7 @@ function StudentView() {
     const handleQueue = async (email, index) => {
         console.log("Email:", email);
         const companyDocRef = doc(db, "recruiterProfiles", email);
-    
+
         try {
             const companyDoc = await getDoc(companyDocRef);
             if (!companyDoc.exists()) {
@@ -107,10 +107,13 @@ function StudentView() {
             let updatedQueue = companyDoc.data().queue || [];
             const studentEmail = "student@example.com"; // Replace with the actual student's email
     
+            let queuePosition = -1;
             if (updatedQueue.includes(studentEmail)) {
+                queuePosition = updatedQueue.indexOf(studentEmail);
                 updatedQueue = updatedQueue.filter(e => e !== studentEmail); // Remove student from queue
             } else {
                 updatedQueue.push(studentEmail); // Add student to queue
+                queuePosition = updatedQueue.length - 1;
             }
             console.log("Before update - currentCompany:", currentCompany, "index:", index);
             console.log("Conditional", currentCompany === index);
@@ -121,7 +124,7 @@ function StudentView() {
                 setCurrentCompany(index); // Add to queue
             }
             await updateDoc(companyDocRef, { queue: updatedQueue });
-            setQueueCount(updatedQueue.length);
+            setQueueCount(queuePosition + 1); // Update queue count based on position
             console.log("After update - currentCompany:", currentCompany);
         } catch (error) {
             console.error("Error updating queue: ", error);
